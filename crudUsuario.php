@@ -11,4 +11,3 @@ $resultado = query("SELECT * FROM usuario WHERE nome='$nome'");
 fechar();
 return $resultado;
 }
-?>

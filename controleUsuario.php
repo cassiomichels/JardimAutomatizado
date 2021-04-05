@@ -1,38 +1,43 @@
 <?php
-	include 'crudUsuario.php';
+include 'crudUsuario.php';
 
-	if(isset($_POST["opcao"])){
+if (isset($_POST["opcao"])) {
 
 	$opcao = $_POST["opcao"];
 
 
 
 
-		if ($opcao =="Entrar") {
-			$nome=$_POST["nome"];
-			$senha=sha1($_POST["senha"]);
-			$nomeBanco="null";
-			$senhaBanco="null";
-			$resultado=buscarUsuario($nome);
-			while ($linha=mysqli_fetch_assoc($resultado)) {
-				$nomeBanco=$linha['nome'];
-				$senhaBanco=$linha['senha'];
+	if ($opcao == "Entrar") {
+		$nome = $_POST["nome"];
+		$senha = sha1($_POST["senha"]);
+
+		$nomeSeguro = addslashes($nome);
+		$senhaSegura = addslashes($senha);
+
+		$nomeBanco = "null";
+		$senhaBanco = "null";
+		$resultado = buscarUsuario($nomeSeguro);
+		while ($linha = mysqli_fetch_assoc($resultado)) {
+			$nomeBanco = addslashes($linha['nome']);
+			$senhaBanco = addslashes($linha['senha']);
+		}
+		if ($nome == $nomeBanco) {
+			if ($senha == $senhaBanco) {
+
+				session_start();
+
+				$_SESSION['nome'] = $nomeBanco;
+				$_SESSION['senha'] = $senhaBanco;
+
+				header("Location: PaginaInicial.php");
+			} else {
+				echo "<script>alert('Nome ou senha Incorretos');</script>";
+				echo "<script>window.location = 'index.php';</script>";
 			}
-			if ($nome == $nomeBanco) {
-				if ($senha == $senhaBanco) {
-					session_start();
-					$_SESSION['nome']=$nomeBanco;
-					$_SESSION['senha']=$senhaBanco;
-					header("Location: index.php");
-				}
-				else{
-					echo "<script>alert('Senha Incorreta');</script>";
-					echo "<script>window.location = 'login.html';</script>"; 
-				}
-			}
-			else{
-				echo "<script>alert('Nome Incorreto');</script>";
-				echo "<script>window.location = 'login.html';</script>";
+		}else{
+				echo "<script>alert('Nome ou senha Incorretos');</script>";
+				echo "<script>window.location = 'index.php';</script>";
 					}
 				}
 
@@ -45,9 +50,7 @@
 					session_start();
 					session_destroy();
 					
-					header("Location: login.html");
+					header("Location: index.php");
 				}
 			}
-	
-	
-?>
+

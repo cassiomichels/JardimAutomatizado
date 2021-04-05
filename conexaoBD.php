@@ -10,7 +10,7 @@ mysqli_close($conexao);
 }
 function query($sql){
 global $conexao;
-$query = mysqli_query($conexao, $sql) or die (mysqli_query_error());
+$query = mysqli_query($conexao, $sql) or die (mysqli_connect_error());
 return $query;
 }
  ?>
